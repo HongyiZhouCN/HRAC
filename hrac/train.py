@@ -15,6 +15,8 @@ from envs import EnvWithGoal, GatherEnv
 from envs.create_maze_env import create_maze_env
 from envs.create_gather_env import create_gather_env
 
+import fancy_gym
+
 
 """
 HIRO part adapted from
@@ -170,11 +172,15 @@ def run_hrac(args):
         env = EnvWithGoal(create_maze_env(args.env_name, args.seed), args.env_name)
         env.seed(args.seed)
     else:
-        raise NotImplementedError
+        env = fancy_gym.make(args.env_name, args.seed)
+        env = EnvWithGoal(env, args.env_name)
 
-    low = np.array((-10, -10, -0.5, -1, -1, -1, -1,
-                    -0.5, -0.3, -0.5, -0.3, -0.5, -0.3, -0.5, -0.3))
-    max_action = float(env.action_space.high[0])
+
+    # low = np.array((-10, -10, -0.5, -1, -1, -1, -1,
+    #                 -0.5, -0.3, -0.5, -0.3, -0.5, -0.3, -0.5, -0.3))
+    low = env.action_space.low
+    # max_action = float(env.action_space.high[0])
+    max_action = float(np.max(env.action_space.high))
     policy_noise = 0.2
     noise_clip = 0.5
     high = -low

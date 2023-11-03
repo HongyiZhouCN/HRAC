@@ -30,6 +30,7 @@ def get_reward_fn(env_name):
     elif env_name == 'AntFall':
         return lambda obs, goal: -np.sum(np.square(obs[:3] - goal)) ** 0.5
     else:
+
         assert False, 'Unknown env'
 
 
