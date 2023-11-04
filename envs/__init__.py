@@ -18,6 +18,9 @@ def get_goal_sample_fn(env_name, evaluate):
         return lambda: np.array([0., 19.])
     elif env_name == 'AntFall':
         return lambda: np.array([0., 27., 4.5])
+    elif env_name == 'BoxPushingDense-v0':
+        #TODO: change this, figure out what the goal is
+        return lambda: np.zeros(28)
     else:
         assert False, 'Unknown env'
 
@@ -29,8 +32,9 @@ def get_reward_fn(env_name):
         return lambda obs, goal: float(np.sum(np.square(obs[:2] - goal)) ** 0.5 < 1)
     elif env_name == 'AntFall':
         return lambda obs, goal: -np.sum(np.square(obs[:3] - goal)) ** 0.5
+    elif env_name == 'BoxPushingDense-v0':
+        return lambda obs, goal: -np.sum(np.square(obs - goal)) ** 0.5
     else:
-
         assert False, 'Unknown env'
 
 
@@ -38,6 +42,9 @@ def get_success_fn(env_name):
     if env_name in ['AntMaze', 'AntPush', 'AntFall']:
         return lambda reward: reward > -5.0
     elif env_name == 'AntMazeSparse':
+        return lambda reward: reward > 1e-6
+    elif env_name == 'BoxPushingDense-v0':
+        #TODO: change this, figure out what the reward is
         return lambda reward: reward > 1e-6
     else:
         assert False, 'Unknown env'
